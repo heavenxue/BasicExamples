@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="datas">
+        <item>微信</item>
+        <item>支付宝</item>
+        <item>三星币</item>
+        <item>充值卡</item>
+        <item>游戏点卡</item>
+        <item>短代</item>
+        <item>京东支付</item>
+        <item>QQ支付</item>
+        <item>银联</item>
+        <item>财付通</item>
+    </array>
+</resources>
