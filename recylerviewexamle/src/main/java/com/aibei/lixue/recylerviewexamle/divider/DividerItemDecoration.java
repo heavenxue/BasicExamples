@@ -15,11 +15,11 @@ import android.view.View;
  */
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
-    private static final int[] ATTRS = new int[]{
-            android.R.attr.listDivider
-    };
-    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
-    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
+    //我们通过获取系统属性中的listDivider来添加，在系统中的AppTheme中设置
+    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
+
+    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;//横向
+    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;//竖向
     private Drawable mDivider;
     private int mOrientation;
 
@@ -40,49 +40,64 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         if (mOrientation == VERTICAL_LIST) {
-            drawVertical(c, parent);
-        } else {
             drawHorizontal(c, parent);
+        } else {
+            drawVertical(c, parent);
         }
     }
 
+    /**
+     * 画竖线
+     * @param c
+     * @param parent 这里的parent其实是显示在屏幕显示的这部分
+     */
     public void drawVertical(Canvas c, RecyclerView parent) {
-        final int left = parent.getPaddingLeft();
-        final int right = parent.getWidth() - parent.getPaddingRight();
-
+        int top = parent.getPaddingTop();
+        int bottom = parent.getHeight() - parent.getPaddingBottom();
         final int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++){
             final View child = parent.getChildAt(i);
-            RecyclerView v = new RecyclerView(parent.getContext());
-            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+            //获得child的布局信息
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)child.getLayoutParams();
+            final int left = child.getRight() + params.rightMargin;
+            final int right = left + mDivider.getIntrinsicWidth();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+        }
+    }
+
+    /**
+     * 画横线
+     * @param c
+     * @param parent 这里的parent其实是显示在屏幕显示的这部分
+     */
+    public void drawHorizontal(Canvas c, RecyclerView parent) {
+        int left = parent.getPaddingLeft();
+        int right = parent.getWidth() - parent.getPaddingRight();
+        final int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++){
+            final View child = parent.getChildAt(i);
+
+            //获得child的布局信息
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)child.getLayoutParams();
             final int top = child.getBottom() + params.bottomMargin;
             final int bottom = top + mDivider.getIntrinsicHeight();
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
+            //Log.d("wnw", left + " " + top + " "+right+"   "+bottom+" "+i);
         }
     }
 
-    public void drawHorizontal(Canvas c, RecyclerView parent) {
-        final int top = parent.getPaddingTop();
-        final int bottom = parent.getHeight() - parent.getPaddingBottom();
-
-        final int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final View child = parent.getChildAt(i);
-            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-            final int left = child.getRight() + params.rightMargin;
-            final int right = left + mDivider.getIntrinsicHeight();
-            mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
-        }
-    }
-
+    //由于Divider也有长宽高，每一个Item需要向下或者向右偏移
     @Override
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
-        if (mOrientation == VERTICAL_LIST) {
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
-        } else {
+        if (mOrientation == HORIZONTAL_LIST) {
+            //画竖线，就是往右偏移一个分割线的宽度
             outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+        } else {
+            //画横线，就是往下偏移一个分割线的高度
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
         }
     }
 }
