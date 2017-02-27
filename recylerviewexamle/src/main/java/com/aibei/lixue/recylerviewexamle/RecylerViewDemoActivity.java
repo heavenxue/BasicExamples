@@ -11,6 +11,7 @@ public class RecylerViewDemoActivity extends AppCompatActivity implements View.O
     private Button btn_mix;
     private Button btn_header;
     private Button btn_mutiselected;
+    private Button btn_sliding_left;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class RecylerViewDemoActivity extends AppCompatActivity implements View.O
         btn_mix = (Button) findViewById(R.id.btn_mix);
         btn_header = (Button) findViewById(R.id.btn_header_boot);
         btn_mutiselected = (Button) findViewById(R.id.mutil_select);
+        btn_sliding_left = (Button) findViewById(R.id.btn_sliding_left);
     }
 
     private void initData(){
@@ -32,6 +34,7 @@ public class RecylerViewDemoActivity extends AppCompatActivity implements View.O
         btn_header.setOnClickListener(this);
         btn_mix.setOnClickListener(this);
         btn_mutiselected.setOnClickListener(this);
+        btn_sliding_left.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +53,9 @@ public class RecylerViewDemoActivity extends AppCompatActivity implements View.O
                 break;
             case R.id.btn_header_boot:
                 intent.putExtra("adapterType",3);
+                break;
+            case R.id.btn_sliding_left:
+                intent.putExtra("adapterType",4);
                 break;
         }
         startActivity(intent);

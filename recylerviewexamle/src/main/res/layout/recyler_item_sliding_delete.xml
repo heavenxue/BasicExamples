@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.aibei.lixue.recylerviewexamle.customView.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:padding="10dp"
+    app:dragEdge="right"
+    app:mode="normal"
+    >
+    <FrameLayout
+        android:id="@+id/framelayout_content"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorBlack"/>
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/delete_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:background="#ffcc0000"
+        >
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:background="@drawable/trash"
+            />
+    </FrameLayout>
+</com.aibei.lixue.recylerviewexamle.customView.SwipeLayout>

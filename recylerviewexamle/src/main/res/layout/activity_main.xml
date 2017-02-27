@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     tools:context="com.aibei.lixue.recylerviewexamle.MainActivity">
-<android.support.v7.widget.RecyclerView
+<com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/recyclerView"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
     >
-</android.support.v7.widget.RecyclerView>
+</com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
 </RelativeLayout>

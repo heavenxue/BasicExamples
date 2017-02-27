@@ -32,5 +32,11 @@
         android:layout_height="wrap_content"
         android:text="增加头尾"
         />
+    <Button
+        android:id="@+id/btn_sliding_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="左滑删除伴有动画"
+        />
 
 </com.aibei.lixue.library.FlowLayout>
