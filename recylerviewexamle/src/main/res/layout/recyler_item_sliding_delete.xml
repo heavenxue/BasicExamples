@@ -9,6 +9,7 @@
     app:dragEdge="right"
     app:mode="normal"
     >
+
     <FrameLayout
         android:id="@+id/framelayout_content"
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
             android:layout_gravity="center"
             android:textColor="@color/colorBlack"/>
     </FrameLayout>
+
     <FrameLayout
         android:id="@+id/delete_layout"
         android:layout_width="wrap_content"

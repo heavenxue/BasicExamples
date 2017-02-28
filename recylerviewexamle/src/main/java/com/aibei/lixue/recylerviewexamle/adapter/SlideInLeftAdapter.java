@@ -2,16 +2,20 @@ package com.aibei.lixue.recylerviewexamle.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aibei.lixue.recylerviewexamle.R;
-import com.aibei.lixue.recylerviewexamle.customView.SwipeLayout;
-import com.aibei.lixue.recylerviewexamle.customView.ViewBinderHelper;
+import com.aibei.lixue.recylerviewexamle.customView.RecyclerSwipeAdapter;
+import com.aibei.lixue.recylerviewexamle.customView.SimpleSwipeListener;
+import com.aibei.lixue.recylerviewexamle.customView.SwipeRevealLayout;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.List;
 
@@ -19,10 +23,49 @@ import java.util.List;
  * 作者：lixue on 2017/2/21 18:24
  */
 
-public class SlideInLeftAdapter extends RecyclerView.Adapter<SlideInLeftAdapter.SlideInLeftHolder> {
+public class SlideInLeftAdapter extends RecyclerSwipeAdapter<SlideInLeftAdapter.SimpleViewHolder> {
     private List<String> mDatas;
     private Context context;
-    private final ViewBinderHelper binderHelper = new ViewBinderHelper();
+
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipe;
+    }
+
+    @Override
+    public void closeAllExcept(SwipeRevealLayout layout) {
+
+    }
+
+    @Override
+    public void removeShownLayouts(SwipeRevealLayout layout) {
+
+    }
+
+    public static class SimpleViewHolder extends RecyclerView.ViewHolder {
+        SwipeRevealLayout swipeLayout;
+        TextView textViewPos;
+        TextView textViewData;
+        Button buttonDelete;
+
+        public SimpleViewHolder(View itemView) {
+            super(itemView);
+            swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe);
+            textViewPos = (TextView) itemView.findViewById(R.id.position);
+            textViewData = (TextView) itemView.findViewById(R.id.text_data);
+            buttonDelete = (Button) itemView.findViewById(R.id.delete);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(getClass().getSimpleName(), "onItemSelected: " + textViewData.getText().toString());
+                    Toast.makeText(view.getContext(), "onItemSelected: " + textViewData.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
 
     public SlideInLeftAdapter(Context context,List<String> datalist){
         this.context = context;
@@ -30,58 +73,72 @@ public class SlideInLeftAdapter extends RecyclerView.Adapter<SlideInLeftAdapter.
     }
 
     @Override
-    public SlideInLeftHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyler_item_sliding_delete,null);
-        return new SlideInLeftHolder(v);
+    public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, parent, false);
+        return new SimpleViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final SimpleViewHolder viewHolder, final int position) {
+        String item = mDatas.get(position);
+        viewHolder.swipeLayout.setShowMode(SwipeRevealLayout.ShowMode.LayDown);
+        viewHolder.swipeLayout.addSwipeListener(new SimpleSwipeListener() {
+            @Override
+            public void onStartOpen(SwipeRevealLayout layout) {
+
+            }
+
+            @Override
+            public void onOpen(SwipeRevealLayout layout) {
+                //执行动画
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
+            }
+
+            @Override
+            public void onStartClose(SwipeRevealLayout layout) {
+
+            }
+
+            @Override
+            public void onClose(SwipeRevealLayout layout) {
+
+            }
+
+            @Override
+            public void onUpdate(SwipeRevealLayout layout, int leftOffset, int topOffset) {
+
+            }
+
+            @Override
+            public void onHandRelease(SwipeRevealLayout layout, float xvel, float yvel) {
+
+            }
+        });
+        viewHolder.swipeLayout.setOnDoubleClickListener(new SwipeRevealLayout.DoubleClickListener() {
+            @Override
+            public void onDoubleClick(SwipeRevealLayout layout, boolean surface) {
+                Toast.makeText(context, "DoubleClick", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        viewHolder.buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemManger.removeShownLayouts(viewHolder.swipeLayout);
+                mDatas.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mDatas.size());
+                mItemManger.closeAllItems();
+                Toast.makeText(view.getContext(), "Deleted " + viewHolder.textViewData.getText().toString() + "!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        viewHolder.textViewPos.setText((position + 1) + ".");
+        viewHolder.textViewData.setText(item);
+        mItemManger.bind(viewHolder.itemView, position);
     }
 
     @Override
     public int getItemCount() {
         return mDatas != null ? mDatas.size() : 0;
-    }
-
-    @Override
-    public void onBindViewHolder(final SlideInLeftHolder holder, int position) {
-        if (mDatas != null && 0 <= position && position < mDatas.size()) {
-            final String data = mDatas.get(position);
-            // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
-            // put an unique string id as value, can be any string which uniquely define the data
-//            binderHelper.bind(holder.swipeLayout, data);
-
-            holder.textView.setText(mDatas.get(position));
-
-            holder.layout_content.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int n = holder.getLayoutPosition();
-                    Toast.makeText(context,"我点击了:" + n ,Toast.LENGTH_SHORT).show();
-                }
-            });
-            holder.btn_Delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int n = holder.getLayoutPosition();
-                    mDatas.remove(n);
-                    notifyDataSetChanged();
-                }
-            });
-        }
-
-
-    }
-
-    protected static class SlideInLeftHolder extends RecyclerView.ViewHolder{
-        public FrameLayout btn_Delete;
-        public TextView textView;
-        public ViewGroup layout_content;
-        public SwipeLayout swipeLayout;
-
-        public SlideInLeftHolder(View itemView) {
-            super(itemView);
-            btn_Delete = (FrameLayout) itemView.findViewById(R.id.delete_layout);
-            textView = (TextView) itemView.findViewById(R.id.text);
-            layout_content = (ViewGroup) itemView.findViewById(R.id.framelayout_content);
-            swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
-        }
     }
 }
