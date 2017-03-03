@@ -24,15 +24,12 @@ import com.aibei.lixue.recylerviewexamle.R;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SwipeRevealLayout extends FrameLayout {
-    @Deprecated
-    public static final int EMPTY_LAYOUT = -1;
     private static final int DRAG_LEFT = 1;
     private static final int DRAG_RIGHT = 2;
     private static final int DRAG_TOP = 4;
@@ -48,7 +45,7 @@ public class SwipeRevealLayout extends FrameLayout {
     private LinkedHashMap<DragEdge, View> mDragEdges = new LinkedHashMap<>();
     private ShowMode mShowMode;
 
-    private float[] mEdgeSwipesOffset = new float[4];
+    private float[] mEdgeSwipesOffset = new float[4];//左，上，右，下的i边缘滑动偏移量
 
     private List<SwipeListener> mSwipeListeners = new ArrayList<>();
     private List<SwipeDenier> mSwipeDeniers = new ArrayList<>();
@@ -71,9 +68,12 @@ public class SwipeRevealLayout extends FrameLayout {
         Bottom
     }
 
+    /**
+     * 显示模式
+     */
     public enum ShowMode {
-        LayDown,
-        PullOut
+        LayDown,//在view之上
+        PullOut//折叠，推出的展现
     }
 
     public SwipeRevealLayout(Context context) {
@@ -86,11 +86,11 @@ public class SwipeRevealLayout extends FrameLayout {
 
     public SwipeRevealLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mDragHelper = ViewDragHelper.create(this, mDragHelperCallback);
+        mDragHelper = ViewDragHelper.create(this, mDragHelperCallback);//ViewDragHelper是用静态方法实现的
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeLayout);
-        int dragEdgeChoices = a.getInt(R.styleable.SwipeLayout_drag_edge, DRAG_RIGHT);
+        int dragEdgeChoices = a.getInt(R.styleable.SwipeLayout_dragEdge, DRAG_RIGHT);
         mEdgeSwipesOffset[DragEdge.Left.ordinal()] = a.getDimension(R.styleable.SwipeLayout_leftEdgeSwipeOffset, 0);
         mEdgeSwipesOffset[DragEdge.Right.ordinal()] = a.getDimension(R.styleable.SwipeLayout_rightEdgeSwipeOffset, 0);
         mEdgeSwipesOffset[DragEdge.Top.ordinal()] = a.getDimension(R.styleable.SwipeLayout_topEdgeSwipeOffset, 0);
@@ -109,7 +109,7 @@ public class SwipeRevealLayout extends FrameLayout {
         if ((dragEdgeChoices & DRAG_BOTTOM) == DRAG_BOTTOM) {
             mDragEdges.put(DragEdge.Bottom, null);
         }
-        int ordinal = a.getInt(R.styleable.SwipeLayout_show_mode, ShowMode.PullOut.ordinal());
+        int ordinal = a.getInt(R.styleable.SwipeLayout_mode, ShowMode.PullOut.ordinal());
         mShowMode = ShowMode.values()[ordinal];
         a.recycle();
 
@@ -1546,18 +1546,6 @@ public class SwipeRevealLayout extends FrameLayout {
     }
 
 
-    /**
-     * Deprecated, use {@link #setDrag(DragEdge, View)}
-     */
-    @Deprecated
-    public void setDragEdge(DragEdge dragEdge) {
-        clearDragEdge();
-        if (getChildCount() >= 2) {
-            mDragEdges.put(dragEdge, getChildAt(getChildCount() - 2));
-        }
-        setCurrentDragEdge(dragEdge);
-    }
-
     public void onViewRemoved(View child) {
         for (Map.Entry<DragEdge, View> entry : new HashMap<DragEdge, View>(mDragEdges).entrySet()) {
             if (entry.getValue() == child) {
@@ -1570,52 +1558,6 @@ public class SwipeRevealLayout extends FrameLayout {
         return mDragEdges;
     }
 
-    /**
-     * Deprecated, use {@link #getDragEdgeMap()}
-     */
-    @Deprecated
-    public List<DragEdge> getDragEdges() {
-        return new ArrayList<DragEdge>(mDragEdges.keySet());
-    }
-
-    /**
-     * Deprecated, use {@link #setDrag(DragEdge, View)}
-     */
-    @Deprecated
-    public void setDragEdges(List<DragEdge> dragEdges) {
-        clearDragEdge();
-        for (int i = 0, size = Math.min(dragEdges.size(), getChildCount() - 1); i < size; i++) {
-            DragEdge dragEdge = dragEdges.get(i);
-            mDragEdges.put(dragEdge, getChildAt(i));
-        }
-        if (dragEdges.size() == 0 || dragEdges.contains(DefaultDragEdge)) {
-            setCurrentDragEdge(DefaultDragEdge);
-        } else {
-            setCurrentDragEdge(dragEdges.get(0));
-        }
-    }
-
-    /**
-     * Deprecated, use {@link #addDrag(DragEdge, View)}
-     */
-    @Deprecated
-    public void setDragEdges(DragEdge... mDragEdges) {
-        clearDragEdge();
-        setDragEdges(Arrays.asList(mDragEdges));
-    }
-
-    /**
-     * Deprecated, use {@link #addDrag(DragEdge, View)}
-     * When using multiple drag edges it's a good idea to pass the ids of the views that
-     * you're using for the left, right, top bottom views (-1 if you're not using a particular view)
-     */
-    @Deprecated
-    public void setBottomViewIds(int leftId, int rightId, int topId, int bottomId) {
-        addDrag(DragEdge.Left, findViewById(leftId));
-        addDrag(DragEdge.Right, findViewById(rightId));
-        addDrag(DragEdge.Top, findViewById(topId));
-        addDrag(DragEdge.Bottom, findViewById(bottomId));
-    }
 
     private float getCurrentOffset() {
         if (mCurrentDragEdge == null) return 0;

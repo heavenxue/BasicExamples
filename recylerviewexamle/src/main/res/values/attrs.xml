@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SwipeRevealLayout">
-    <attr name="dragEdge">
-        <flag name="left" value="1" />
-        <flag name="right" value="2" />
-        <flag name="top" value="4" />
-        <flag name="bottom" value="8" />
-    </attr>
-
-    <attr name="mode">
-        <enum name="normal" value="0" />
-        <enum name="same_level"   value="1" />
-    </attr>
-
-    <attr name="flingVelocity" format="integer" />
-
-    <attr name="minDistRequestDisallowParent" format="dimension" />
-    </declare-styleable>
     <declare-styleable name="SwipeLayout">
-        <attr name="drag_edge">
+        <attr name="dragEdge">
             <flag name="left" value="1" />
             <flag name="right" value="2" />
             <flag name="top" value="4" />
@@ -28,7 +11,7 @@
         <attr name="rightEdgeSwipeOffset" format="dimension" />
         <attr name="topEdgeSwipeOffset" format="dimension" />
         <attr name="bottomEdgeSwipeOffset" format="dimension" />
-        <attr name="show_mode" format="enum">
+        <attr name="mode" format="enum">
             <enum name="lay_down" value="0" />
             <enum name="pull_out" value="1" />
         </attr>
