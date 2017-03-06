@@ -13,8 +13,9 @@ public class KFCWaiter {
     /**
      * 构建对象
      */
-    public void construct(){
+    public Meal construct(){
         builder.buildFood();
         builder.buildDrink();
+        return builder.getMeal();
     }
    }
