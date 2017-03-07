@@ -31,4 +31,18 @@
         android:layout_height="wrap_content"
         android:text="工厂模式"
         />
+
+    <TextView
+        android:id="@+id/text_strategy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="策略模式"
+        />
+
+    <TextView
+        android:id="@+id/text_proxy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="代理模式"
+        />
 </LinearLayout>
