@@ -28,6 +28,8 @@ package com.aibei.lixue.designmodeexample.factory;
  * 当抽象工厂模式中每一个具体工厂类只创建一个产品对象，也就是只存在一个产品等级结构时，抽象工厂模式退化成工厂方法模式；
  * 当工厂方法模式中抽象工厂与具体工厂合并，提供一个统一的工厂来创建产品对象，并将创建对象的工厂方法设计为静态方法时，工厂方法模式退化成简单工厂模式。
  *
+ *   工厂方法模式只有一个抽象产品类，而抽象方法模式有多个
+ *   工厂方法模式只能创建一个产品的实例，而抽象方法能创建多个
  */
 
 public class LogFactory implements ILogFactory {
@@ -37,7 +39,7 @@ public class LogFactory implements ILogFactory {
     }
 
     @Override
-    public ILog createDatabaseLog() {
+    public ILog2 createDatabaseLog() {
         return new DataBaseLog();
     }
 }

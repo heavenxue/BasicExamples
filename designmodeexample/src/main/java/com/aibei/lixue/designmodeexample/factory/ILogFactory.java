@@ -6,6 +6,6 @@ package com.aibei.lixue.designmodeexample.factory;
 
 public interface ILogFactory {
     ILog createFileLog();
-    ILog createDatabaseLog();
+    ILog2 createDatabaseLog();
 
 }

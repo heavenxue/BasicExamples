@@ -8,9 +8,10 @@ import com.aibei.lixue.designmodeexample.builder.KFCWaiter;
 import com.aibei.lixue.designmodeexample.builder.Meal;
 import com.aibei.lixue.designmodeexample.builder.SubMealBuilderA;
 import com.aibei.lixue.designmodeexample.factory.ILog;
+import com.aibei.lixue.designmodeexample.factory.ILog2;
+import com.aibei.lixue.designmodeexample.factory.Log2Factory;
 import com.aibei.lixue.designmodeexample.factory.LogFactory;
 import com.aibei.lixue.designmodeexample.proxy.Proxy;
-import com.aibei.lixue.designmodeexample.proxy.Subject;
 import com.aibei.lixue.designmodeexample.singleIntance.CTO;
 import com.aibei.lixue.designmodeexample.strategy.AddStrategy;
 import com.aibei.lixue.designmodeexample.strategy.Calcu;
@@ -64,8 +65,18 @@ public class MainActivity extends AppCompatActivity {
         //优化的工厂方法模式
         LogFactory factory = new LogFactory();
         ILog fileLog = factory.createFileLog();
-        ILog dataBaseLog = factory.createDatabaseLog();
-        text_factory.setText("fileLog:" + fileLog.writeLog() + "\n" +"dateBaseLog:" + dataBaseLog.writeLog());
+        ILog2 dataBaseLog = factory.createDatabaseLog();
+        String logStr = "fileLog:" + fileLog.writeLog() + "\n";
+        dataBaseLog.outLog();
+        text_factory.setText(logStr);
+
+        //抽象工厂模式
+        Log2Factory log2Factory = new Log2Factory();
+        ILog file2Log = log2Factory.createFileLog();
+        ILog2 database2Log = log2Factory.createDatabaseLog();
+        text_factory.setText(logStr + "\n"  +"fileLog:" + fileLog.writeLog() + "\n");
+        database2Log.outLog();
+
 
         //模板模式，具体见log吧
         AbstractComputer comp = new CoderComputer();
@@ -85,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 "除法 124 / 3 = "+ dividestr);
 
         //代理模式
-        Subject subject = new Proxy();
-        String theRequest = subject.request();
+        String theRequest = new Proxy().request();
         text_proxy.setText(theRequest);
     }
 }
