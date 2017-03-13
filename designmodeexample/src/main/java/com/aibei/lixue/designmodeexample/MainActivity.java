@@ -24,6 +24,9 @@ import com.aibei.lixue.designmodeexample.factory.LogFactory;
 import com.aibei.lixue.designmodeexample.iterator.Contanier;
 import com.aibei.lixue.designmodeexample.iterator.IContanier;
 import com.aibei.lixue.designmodeexample.iterator.Iterator;
+import com.aibei.lixue.designmodeexample.observe.ConcteteObserve;
+import com.aibei.lixue.designmodeexample.observe.ConcteteSubject;
+import com.aibei.lixue.designmodeexample.observe.Observer;
 import com.aibei.lixue.designmodeexample.proxy.Proxy;
 import com.aibei.lixue.designmodeexample.singleIntance.CTO;
 import com.aibei.lixue.designmodeexample.strategy.AddStrategy;
@@ -169,5 +172,17 @@ public class MainActivity extends AppCompatActivity {
         car = new RancingCar(new RainyTire());
         String car4 = car.run();
         text_bridge.setText(car1 + "\n " + car2 + "\n " + car3 + "\n " + car4);
+
+        //************观察者模式************
+        //创建主题对象
+        ConcteteSubject subject = new ConcteteSubject();
+        //创建观察者对象
+        Observer observer = new ConcteteObserve();
+        //将观察者对象登记到主题对象上
+        subject.attach(observer);
+        //改变主题对象的状态
+        subject.change("new state");
+
+
     }
 }
